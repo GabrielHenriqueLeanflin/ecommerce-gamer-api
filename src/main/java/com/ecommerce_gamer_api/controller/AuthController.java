@@ -1,7 +1,7 @@
 package com.ecommerce_gamer_api.controller;
 
 import com.ecommerce_gamer_api.domain.user.User;
-import com.ecommerce_gamer_api.dto.auth.ErrorResponseDTO;
+import com.ecommerce_gamer_api.dto.ErrorResponseDTO;
 import com.ecommerce_gamer_api.dto.auth.LoginRequestDTO;
 import com.ecommerce_gamer_api.dto.auth.RegisterRequestDTO;
 import com.ecommerce_gamer_api.dto.auth.AuthResponseDTO;
