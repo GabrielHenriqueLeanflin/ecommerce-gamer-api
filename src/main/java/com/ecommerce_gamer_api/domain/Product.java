@@ -1,5 +1,6 @@
-package com.ecommerce_gamer_api.domain.user;
+package com.ecommerce_gamer_api.domain;
 
+import com.ecommerce_gamer_api.dto.product.ProductRequestDTO; // Importe o DTO
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,4 +26,17 @@ public class Product {
     private BigDecimal price;
 
     private String category;
+
+    private String brand;
+
+    private Integer stock;
+
+    public Product(ProductRequestDTO data) {
+        this.name = data.name();
+        this.description = data.description();
+        this.price = data.price();
+        this.category = data.category();
+        this.brand = data.brand();
+        this.stock = data.stock();
+    }
 }

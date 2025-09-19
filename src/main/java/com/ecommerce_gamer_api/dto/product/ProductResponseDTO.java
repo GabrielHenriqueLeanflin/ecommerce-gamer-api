@@ -1,18 +1,18 @@
 package com.ecommerce_gamer_api.dto.product;
 
-import com.ecommerce_gamer_api.domain.user.Product;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.ecommerce_gamer_api.domain.Product;
 
-import java.util.List;
+import java.math.BigDecimal;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProductResponseDTO {
-    private List<Product> result;
-    private long count;
+public record ProductResponseDTO(
+        long id,
+        String name,
+        BigDecimal price,
+        String category,
+        String brand,
+        Integer stock
+) {
+    public ProductResponseDTO(Product product) {
+        this(product.getId(), product.getName(), product.getPrice(), product.getCategory(), product.getBrand(), product.getStock());
+    }
 }
