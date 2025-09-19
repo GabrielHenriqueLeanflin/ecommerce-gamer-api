@@ -4,7 +4,7 @@
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-green)
 ![Status](https://img.shields.io/badge/status-concluído-brightgreen)
 
-API RESTful para um e-commerce de hardware e periféricos gamer, desenvolvida como um projeto completo para demonstrar habilidades em desenvolvimento backend com o ecossistema Spring. O projeto inclui funcionalidades avançadas como autenticação baseada em tokens, gerenciamento de pedidos com lógica de negócio transacional e uma arquitetura robusta com tratamento de erros centralizado.
+API RESTful para um e-commerce de hardware e periféricos gamer, desenvolvida como um projeto completo para demonstrar habilidades em desenvolvimento backend com o ecossistema Spring. O projeto inclui funcionalidades como autenticação baseada em tokens, gerenciamento de pedidos com lógica de negócio transacional e uma arquitetura robusta com tratamento de erros centralizado.
 
 ---
 
