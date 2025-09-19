@@ -1,6 +1,6 @@
 package com.ecommerce_gamer_api.repository;
 
-import com.ecommerce_gamer_api.domain.user.Product;
+import com.ecommerce_gamer_api.domain.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
