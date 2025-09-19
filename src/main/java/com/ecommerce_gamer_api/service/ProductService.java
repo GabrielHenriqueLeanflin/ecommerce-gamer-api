@@ -18,8 +18,8 @@ public class ProductService {
 
     private final ProductRepository repository;
 
-    public Page<ProductResponseDTO> findAllProducts(String category, BigDecimal maxPrice, String name, Pageable pageable) {
-        Page<Product> productPage = repository.findWithFilters(category, maxPrice, name, pageable);
+    public Page<ProductResponseDTO> findAllProducts(String category, BigDecimal minPrice, BigDecimal maxPrice, String name, Pageable pageable) {
+        Page<Product> productPage = repository.findWithFilters(category, minPrice, maxPrice, name, pageable);
 
         return productPage.map(ProductResponseDTO::new);
     }

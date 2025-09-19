@@ -26,10 +26,11 @@ public class ProductController {
     public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(
             Pageable pageable,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) String name
     ) {
-        Page<ProductResponseDTO> productPage = this.service.findAllProducts(category, maxPrice, name, pageable);
+        Page<ProductResponseDTO> productPage = this.service.findAllProducts(category, minPrice, maxPrice, name, pageable);
         return ResponseEntity.ok(productPage);
     }
 
