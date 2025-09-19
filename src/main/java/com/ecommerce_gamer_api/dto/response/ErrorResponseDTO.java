@@ -1,4 +1,4 @@
-package com.ecommerce_gamer_api.dto;
+package com.ecommerce_gamer_api.dto.response;
 
 import java.time.Instant;
 
