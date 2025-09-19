@@ -1,0 +1,40 @@
+name: CI/CD Pipeline para Oracle Cloud
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    name: Deploy na Oracle Cloud VM
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Deploy na VM via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ORACLE_HOST }}
+          username: ubuntu
+          key: ${{ secrets.ORACLE_SSH_KEY }}
+          script: |
+            # Navega até a pasta do projeto (clona se não existir)
+            if [ ! -d "ecommerce-gamer-api" ]; then
+              git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git ecommerce-gamer-api
+            fi
+            cd ecommerce-gamer-api
+            
+            # Garante que o código está na versão mais recente
+            git pull
+            
+            # Cria o arquivo .env com as senhas para o Docker Compose
+            # O banco de dados 'db' é o nome do serviço no seu docker-compose.yml
+            echo "SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/ecommerce_db?createDatabaseIfNotExist=true" > .env
+            echo "SPRING_DATASOURCE_USERNAME=root" >> .env
+            echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+            echo "API_SECURITY_TOKEN_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            
+            # Usa o Docker Compose para reconstruir e subir a aplicação
+            docker-compose up --build -d
