@@ -65,7 +65,7 @@ A documentação completa e interativa dos endpoints está disponível através 
 
 ## ⚙️ Como Configurar e Rodar o Projeto Localmente?
 
-1. OPÇÃO
+### OPÇÃO 1
 ## 🐳 Rodando com Docker (Recomendado)
 
 A forma mais simples de executar este projeto é utilizando Docker e Docker Compose.
@@ -93,7 +93,7 @@ A forma mais simples de executar este projeto é utilizando Docker e Docker Comp
     docker-compose up --build
     ```
 
-2. OPÇÃO
+### OPÇÃO 2
 ## Instalando tudo local (Não Recomendado)
 A API estará disponível em `http://localhost:8080` e o banco de dados em `localhost:3306`.
 
