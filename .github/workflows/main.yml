@@ -30,7 +30,6 @@ jobs:
             git pull
             
             # Cria o arquivo .env com as senhas para o Docker Compose
-            # O banco de dados 'db' é o nome do serviço no seu docker-compose.yml
             echo "SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/ecommerce_db?createDatabaseIfNotExist=true" > .env
             echo "SPRING_DATASOURCE_USERNAME=root" >> .env
             echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
