@@ -1,5 +1,6 @@
-package com.ecommerce_gamer_api.domain;
+package com.ecommerce_gamer_api.domain.order;
 
+import com.ecommerce_gamer_api.domain.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

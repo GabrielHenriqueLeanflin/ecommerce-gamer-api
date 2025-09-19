@@ -1,5 +1,6 @@
-package com.ecommerce_gamer_api.domain;
+package com.ecommerce_gamer_api.domain.order;
 
+import com.ecommerce_gamer_api.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +33,8 @@ public class Order {
 
     private LocalDateTime createdAt;
 
-    private String status;
+    private LocalDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 }
