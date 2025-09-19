@@ -52,6 +52,7 @@ API RESTful para um e-commerce de hardware e periféricos gamer, desenvolvida co
 * **Documentação:** SpringDoc OpenAPI (Swagger 3)
 * **Gerenciamento de Pacotes:** Maven
 * **Utilitários:** Lombok
+* **Ambiente e Conteinerização:** Docker utilizado para criar o contêiner da aplicação e Docker Compose para orquestração do ambiente de desenvolvimento (API + Banco de Dados)
 
 ---
 
