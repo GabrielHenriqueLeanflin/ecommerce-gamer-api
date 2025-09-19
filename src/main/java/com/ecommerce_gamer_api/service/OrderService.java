@@ -2,14 +2,18 @@ package com.ecommerce_gamer_api.service;
 
 import com.ecommerce_gamer_api.config.exception.BusinessException;
 import com.ecommerce_gamer_api.config.exception.ResourceNotFoundException;
-import com.ecommerce_gamer_api.domain.Order;
-import com.ecommerce_gamer_api.domain.OrderItem;
+import com.ecommerce_gamer_api.domain.order.Order;
+import com.ecommerce_gamer_api.domain.order.OrderItem;
 import com.ecommerce_gamer_api.domain.Product;
 import com.ecommerce_gamer_api.domain.User;
+import com.ecommerce_gamer_api.domain.order.OrderStatus;
+import com.ecommerce_gamer_api.dto.order.OrderDetailResponseDTO;
 import com.ecommerce_gamer_api.dto.order.OrderRequestDTO;
 import com.ecommerce_gamer_api.repository.OrderRepository;
 import com.ecommerce_gamer_api.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +37,8 @@ public class OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setCreatedAt(LocalDateTime.now());
-        order.setStatus("PENDING");
+        order.setUpdatedAt(LocalDateTime.now());
+        order.setStatus(OrderStatus.PENDENTE);
 
         List<OrderItem> orderItems = new ArrayList<>();
         BigDecimal totalPrice = BigDecimal.ZERO;
@@ -61,5 +66,33 @@ public class OrderService {
         order.setTotalPrice(totalPrice);
 
         orderRepository.save(order);
+    }
+
+    @Transactional
+    public OrderDetailResponseDTO updateOrderStatus(Long orderId, String newStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido com ID " + orderId + " não encontrado."));
+
+        OrderStatus statusEnum = OrderStatus.valueOf(newStatus.toUpperCase());
+
+        order.setStatus(statusEnum);
+        order.setUpdatedAt(LocalDateTime.now());
+        Order updatedOrder = orderRepository.save(order);
+
+        return new OrderDetailResponseDTO(updatedOrder);
+    }
+
+    public OrderDetailResponseDTO findOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido com ID " + orderId + " não encontrado."));
+
+        return new OrderDetailResponseDTO(order);
+    }
+
+    public Page<OrderDetailResponseDTO> findOrdersByUser(Pageable pageable) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Page<Order> ordersPage = orderRepository.findAllByUser(user, pageable);
+
+        return ordersPage.map(OrderDetailResponseDTO::new);
     }
 }
