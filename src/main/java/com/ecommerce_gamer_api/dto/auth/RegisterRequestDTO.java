@@ -1,4 +1,16 @@
 package com.ecommerce_gamer_api.dto.auth;
 
-public record RegisterRequestDTO(String name, String email, String password){
-}
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record RegisterRequestDTO(
+        @NotBlank
+        String name,
+
+        @NotBlank
+        @Email(message = "O formato do email é inválido.")
+        String email,
+
+        @NotBlank
+        String password
+) {}
