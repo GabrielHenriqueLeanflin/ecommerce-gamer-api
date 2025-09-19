@@ -24,6 +24,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiResponseDTO<Object>> handleBusinessException(BusinessException ex) {
+        ApiResponseDTO<Object> response = new ApiResponseDTO<>(false, ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -37,9 +43,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-
         ApiResponseDTO<Object> response = new ApiResponseDTO<>(false, "Dados inválidos.", errors);
-
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

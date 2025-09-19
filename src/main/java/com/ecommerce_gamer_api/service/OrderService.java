@@ -1,5 +1,7 @@
 package com.ecommerce_gamer_api.service;
 
+import com.ecommerce_gamer_api.config.exception.BusinessException;
+import com.ecommerce_gamer_api.config.exception.ResourceNotFoundException;
 import com.ecommerce_gamer_api.domain.Order;
 import com.ecommerce_gamer_api.domain.OrderItem;
 import com.ecommerce_gamer_api.domain.Product;
@@ -25,7 +27,7 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public Order createOrder(OrderRequestDTO orderDTO) {
+    public void createOrder(OrderRequestDTO orderDTO) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Order order = new Order();
@@ -37,11 +39,11 @@ public class OrderService {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (var itemDTO : orderDTO.items()) {
-            Product product = productRepository.findById(itemDTO.productId())
-                    .orElseThrow(() -> new RuntimeException("Produto não encontrado: " + itemDTO.productId()));
+            Product product = productRepository.findById(itemDTO.product())
+                    .orElseThrow(() -> new ResourceNotFoundException("Produto com ID " + itemDTO.product() + " não encontrado."));
 
             if (product.getStock() < itemDTO.quantity()) {
-                throw new RuntimeException("Estoque insuficiente para o produto: " + product.getName());
+                throw new BusinessException("Estoque insuficiente para o produto: " + product.getName());
             }
             product.setStock(product.getStock() - itemDTO.quantity());
 
@@ -58,6 +60,6 @@ public class OrderService {
         order.setItems(orderItems);
         order.setTotalPrice(totalPrice);
 
-        return orderRepository.save(order);
+        orderRepository.save(order);
     }
 }
