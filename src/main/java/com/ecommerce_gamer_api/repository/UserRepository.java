@@ -1,6 +1,6 @@
 package com.ecommerce_gamer_api.repository;
 
-import com.ecommerce_gamer_api.domain.user.User;
+import com.ecommerce_gamer_api.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package com.ecommerce_gamer_api.infra.security;
 
-import com.ecommerce_gamer_api.domain.user.User;
+import com.ecommerce_gamer_api.domain.User;
 import com.ecommerce_gamer_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

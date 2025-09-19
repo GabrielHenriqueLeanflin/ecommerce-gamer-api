@@ -1,4 +1,4 @@
-package com.ecommerce_gamer_api.domain.user;
+package com.ecommerce_gamer_api.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
