@@ -1,171 +1,75 @@
 # E-Commerce Gamer API
 
-![Java](https://img.shields.io/badge/Java-17-blue)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-green)
-![Status](https://img.shields.io/badge/status-concluído-brightgreen)
+[![Status do Pipeline](https://github.com/GabrielHenriqueLeanflin/ecommerce-gamer-api/actions/workflows/main.yml/badge.svg)](https://github.com/GabrielHenriqueLeanflin/ecommerce-gamer-api/actions/workflows/main.yml)
+[![Java](https://img.shields.io/badge/Java-17-blue.svg)](https://www.java.com)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-green.svg)](https://spring.io/projects/spring-boot)
+[![Docker](https://img.shields.io/badge/Docker-conteinerizado-blue.svg)](https://www.docker.com/)
+[![AWS](https://img.shields.io/badge/AWS-implantado-orange.svg)](https://aws.amazon.com/)
 
-API RESTful para um e-commerce de hardware e periféricos gamer, desenvolvida como um projeto completo para demonstrar habilidades em desenvolvimento backend com o ecossistema Spring. O projeto inclui funcionalidades como autenticação baseada em tokens, gerenciamento de pedidos com lógica de negócio transacional e uma arquitetura robusta com tratamento de erros centralizado.
+API RESTful para um e-commerce de hardware e periféricos gamer, desenvolvida como um projeto completo para demonstrar habilidades em desenvolvimento backend, DevOps e Cloud.
+
+**Acesse a documentação ao vivo da API implantada na AWS:**
+**[http://54.207.176.183:8080/swagger-ui/index.html](http://54.207.176.183:8080/swagger-ui/index.html)**
 
 ---
 
-## 🚀 Funcionalidades Implementadas
+## 🏛️ Arquitetura e Deploy (CI/CD)
 
-* **Autenticação e Autorização:**
-    * Sistema completo de registro e login de usuários.
-    * Autenticação stateless utilizando **JWT (JSON Web Tokens)**.
-    * Armazenamento seguro de senhas com criptografia.
-    * Filtros de segurança para proteger endpoints específicos.
+Esta aplicação está implantada na **AWS** utilizando uma arquitetura desacoplada e segura:
+* **Aplicação:** A API Spring Boot, conteinerizada com **Docker**, roda em uma instância **EC2**.
+* **Banco de Dados:** Um banco **PostgreSQL** gerenciado pelo **Amazon RDS**, garantindo segurança e escalabilidade.
+* **Acesso ao Servidor:** O acesso para manutenção é feito de forma segura via **AWS Systems Manager (SSM) Session Manager**, eliminando a necessidade de chaves SSH e mantendo a porta 22 fechada.
 
+O processo de deploy é **100% automatizado** através de um pipeline de **CI/CD com GitHub Actions**. A cada `push` para a branch `dev_env`, o pipeline:
+1.  Executa os testes automatizados.
+2.  Constrói a nova imagem Docker da aplicação.
+3.  Conecta-se à instância EC2 via **SSM Run Command** e atualiza a aplicação para a nova versão, sem downtime manual.
 
-* **Gerenciamento de Produtos:**
-    * CRUD completo para produtos.
-    * Busca avançada com **paginação**, **ordenação** e **filtros** dinâmicos por nome, categoria e faixa de preço.
+---
 
+## 🚀 Funcionalidades
 
-* **Sistema de Pedidos:**
-    * Endpoint para usuários autenticados criarem novos pedidos.
-    * Lógica de negócio **transacional** para garantir a consistência dos dados, incluindo a **redução de estoque** dos produtos no momento da compra.
-    * Endpoints para consultar pedidos (detalhes de um pedido específico e todos os pedidos do usuário logado).
-    * Funcionalidade para **atualizar o status** de um pedido.
-
-
-* **Validação de Requests, Tratamento de Erros e Respostas:**
-    * **Respostas de API Padronizadas:** Todas as respostas (sucesso e erro) seguem um formato padrão para facilitar a visualização de quem estar consumindo.
-    * **Validação de Dados:** Uso do Spring Validation para garantir a integridade dos dados de entrada.
-    * **Tratamento de Exceções Centralizado:** Uma captura global de exceções, de recursos não encontrados e de validação, retornando respostas de erro claras e com os status HTTP corretos.
-
-
-* **Documentação:**
-    * Documentação interativa e completa da API gerada automaticamente com **Swagger (springdoc-openapi)**.
+* **Autenticação e Autorização com JWT:** Sistema completo de registro e login com tokens.
+* **Gerenciamento de Produtos:** CRUD completo com busca avançada, paginação e filtros.
+* **Sistema de Pedidos Transacional:** Lógica de negócio para criação de pedidos com atualização de estoque.
+* **Tratamento de Exceções Centralizado:** Respostas de erro padronizadas e claras.
+* **Documentação Interativa:** Gerada automaticamente com **Swagger**.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-* **Linguagem:** Java 17
-* **Framework:** Spring Boot 3.2.5
-* **Segurança:** Spring Security
-* **Banco de Dados:** Spring Data JPA / Hibernate
-* **Persistência:** MySQL
-* **Autenticação:** JWT (JSON Web Tokens) - Biblioteca java-jwt da Auth0
-* **Validação:** Spring Boot Starter Validation
-* **Documentação:** SpringDoc OpenAPI (Swagger 3)
-* **Gerenciamento de Pacotes:** Maven
-* **Utilitários:** Lombok
-* **Ambiente e Conteinerização:** Docker utilizado para criar o contêiner da aplicação e Docker Compose para orquestração do ambiente de desenvolvimento (API + Banco de Dados)
+* **Linguagem & Framework:** Java 17, Spring Boot 3
+* **Persistência:** Spring Data JPA, Hibernate, PostgreSQL
+* **Segurança:** Spring Security, JWT (com Auth0 java-jwt)
+* **Conteinerização:** Docker, Docker Compose
+* **Cloud & DevOps:** AWS (EC2, RDS, IAM, SSM), GitHub Actions
+* **Build:** Maven
+* **Documentação:** SpringDoc OpenAPI
 
 ---
 
-## 📄 Documentação da API (Swagger)
-
-A documentação completa e interativa dos endpoints está disponível através do Swagger UI. Após iniciar a aplicação, acesse o seguinte link no seu navegador:
-
-[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
-
----
-
-## ⚙️ Como Configurar e Rodar o Projeto Localmente?
-
-### OPÇÃO 1
-## 🐳 Rodando com Docker (Recomendado)
+## ⚙️ Como Rodar o Projeto Localmente
 
 A forma mais simples de executar este projeto é utilizando Docker e Docker Compose.
 
 ### Pré-requisitos
-* Docker
-* Docker Compose
+* Instalar Docker
+* Instalar Docker Compose
 
 ### Passo a Passo
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+    git clone [https://github.com/GabrielHenriqueLeanflin/ecommerce-gamer-api.git](https://github.com/GabrielHenriqueLeanflin/ecommerce-gamer-api.git)
     cd ecommerce-gamer-api
     ```
 
-2.  **Copie o .env.example e insira alguma valor de token:**
-    Na raiz do projeto execute o comando abaixo no terminal e preencha o .env
-    ```bash
-    copy .env.example .env
-    ```
-    
-3. **Execute o Docker Compose:**
-    Na raiz do projeto, execute o seguinte comando no terminal. Ele irá construir a imagem da API, baixar a imagem do MySQL e iniciar os dois containers.
+2.  **Execute o Docker Compose:**
+    Na raiz do projeto, execute o comando abaixo. Ele irá construir a imagem da API, baixar a imagem do PostgreSQL e iniciar os dois contêineres.
     ```bash
     docker-compose up --build
     ```
 
-### OPÇÃO 2
-## Instalando tudo local (Não Recomendado)
-A API estará disponível em `http://localhost:8080` e o banco de dados em `localhost:3306`.
-
-
-Siga os passos abaixo para executar o projeto na sua máquina.
-
-### Pré-requisitos
-* JDK 17 ou superior
-* Maven 3.8 ou superior
-* MySQL 8
-
-### Passo a Passo
-
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
-    cd ecommerce-gamer-api
-    ```
-
-2.  **Configure o Banco de Dados:**
-    * Crie um banco de dados no seu MySQL chamado `ecommerce_db`.
-    * Abra o arquivo `src/main/resources/application.properties`.
-    * Altere as propriedades `spring.datasource.username` e `spring.datasource.password` com o seu usuário e senha do MySQL.
-
-3.  **Configure o Segredo do JWT:**
-    * No mesmo arquivo `application.properties`, altere o valor da propriedade `api.security.token.secret` para uma frase secreta de sua escolha.
-
-4.  **Execute a Aplicação:**
-    * Pelo terminal, na raiz do projeto, execute o comando Maven:
-        ```bash
-        mvn spring-boot:run
-        ```
-    * Alternativamente, você pode executar a classe `EcommerceGamerApiApplication.java` diretamente pela sua IDE (IntelliJ, Eclipse, etc.).
-
-A API estará disponível em `http://localhost:8080`.
-
----
-
-## 📦 Exemplo de Uso (cURL)
-
-**1. Registrar um novo usuário:**
-```bash
-curl -X POST http://localhost:8080/auth/register \
--H "Content-Type: application/json" \
--d '{
-    "name": "Seu Nome",
-    "email": "seu@email.com",
-    "password": "sua_senha"
-}'
-```
-
-**2. Fazer login para obter um token:**
-```bash
-curl -X POST http://localhost:8080/auth/login \
--H "Content-Type: application/json" \
--d '{
-    "email": "seu@email.com",
-    "password": "sua_senha"
-}'
-```
-
-**3. Criar um pedido (rota protegida):**
-```bash
-# Substitua <SEU_TOKEN_JWT_AQUI> pelo token recebido no login
-curl -X POST http://localhost:8080/orders \
--H "Content-Type: application/json" \
--H "Authorization: <SEU_TOKEN>" \
--d '{
-    "items": [
-        {"productId": 1, "quantity": 1},
-        {"productId": 5, "quantity": 2}
-    ]
-}'
-```
+3.  **Acesse a aplicação:**
+    * API disponível em: `http://localhost:8080`
+    * Documentação Swagger: `http://localhost:8080/swagger-ui/index.html`
