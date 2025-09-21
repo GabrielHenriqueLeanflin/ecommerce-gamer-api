@@ -1,33 +1,37 @@
-name: CI/CD Pipeline para Oracle Cloud
+name: Deploy - CI/CD Pipeline para AWS EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev_env" ]
 
 jobs:
   deploy:
-    name: Deploy na Oracle Cloud VM
+    name: Deploy na AWS EC2 via SSM
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Pega o código do repositório
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Deploy na EC2 via SSH
-        uses: appleboy/ssh-action@master
+      # Step 2: Configura as credenciais da AWS
+      - name: Configurar credenciais da AWS
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ecommerce-gamer-api
-            git pull
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: sa-east-1
 
-            # Cria o .env com os segredos do RDS
+      # Step 3: Envia o comando de deploy para a EC2
+      - name: Enviar comando de deploy para a EC2 via SSM Run Command
+        uses: aws-actions/aws-ssm-send-command@v1
+        with:
+          instance-ids: ${{ secrets.EC2_INSTANCE_ID }}
+          command: |
+            cd /home/ec2-user/ecommerce-gamer-api
+            git pull
             echo "SPRING_DATASOURCE_URL=${{ secrets.RDS_URL }}" > .env
             echo "SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USERNAME }}" >> .env
             echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }}" >> .env
             echo "API_SECURITY_TOKEN_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-
-            # USA O ARQUIVO DE PRODUÇÃO E FORÇA A RECRIAÇÃO DO CONTAINER 'APP'
-            sudo docker-compose -f docker-compose.prod.yml up --build -d --force-recreate
+            sudo docker-compose -f docker-compose.dev.yml up --build -d --force-recreate
