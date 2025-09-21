@@ -14,6 +14,13 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v3
 
+      # NOVO! Step de Debug para vermos o arquivo
+      - name: Debug - Mostra o conteúdo do main.yml
+        run: |
+          echo "--- Conteúdo do main.yml que o GitHub está lendo ---"
+          cat .github/workflows/main.yml
+          echo "-----------------------------------------------------"
+
       # Step 2: Configura as credenciais da AWS
       - name: Configurar credenciais da AWS
         uses: aws-actions/configure-aws-credentials@v1
