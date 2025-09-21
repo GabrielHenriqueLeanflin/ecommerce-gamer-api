@@ -24,7 +24,7 @@ jobs:
 
       # Step 3: Envia o comando de deploy para a EC2
       - name: Enviar comando de deploy para a EC2 via SSM Run Command
-        uses: aws-actions/aws-ssm-send-command@v1
+        uses: aws-actions/amazon-ssm-send-command@v1
         with:
           instance-ids: ${{ secrets.EC2_INSTANCE_ID }}
           command: |
