@@ -16,7 +16,7 @@ jobs:
 
       # Step 2: Configura as credenciais da AWS
       - name: Configurar credenciais da AWS
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -32,9 +32,9 @@ jobs:
             --parameters 'commands=[
               "cd /home/ec2-user/ecommerce-gamer-api",
               "git pull",
-              "echo SPRING_DATASOURCE_URL=${{ secrets.RDS_URL }} > .env",
-              "echo SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USERNAME }} >> .env",
-              "echo SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }} >> .env",
-              "echo API_SECURITY_TOKEN_SECRET=${{ secrets.JWT_SECRET }} >> .env",
+              echo "SPRING_DATASOURCE_URL=${{ secrets.RDS_URL }}
+              SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USERNAME }}
+              SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }}
+              API_SECURITY_TOKEN_SECRET=${{ secrets.JWT_SECRET }}" > .env
               "sudo docker-compose -f docker-compose.prod.yml up --build -d --force-recreate"
             ]'
