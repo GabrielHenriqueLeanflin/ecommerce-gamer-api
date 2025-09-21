@@ -14,13 +14,6 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      # NOVO! Step de Debug para vermos o arquivo
-      - name: Debug - Mostra o conteúdo do main.yml
-        run: |
-          echo "--- Conteúdo do main.yml que o GitHub está lendo ---"
-          cat .github/workflows/main.yml
-          echo "-----------------------------------------------------"
-
       # Step 2: Configura as credenciais da AWS
       - name: Configurar credenciais da AWS
         uses: aws-actions/configure-aws-credentials@v1
@@ -31,14 +24,17 @@ jobs:
 
       # Step 3: Envia o comando de deploy para a EC2
       - name: Enviar comando de deploy para a EC2 via SSM Run Command
-        uses: aws-actions/amazon-ssm-send-command@v1
-        with:
-          instance-ids: ${{ secrets.EC2_INSTANCE_ID }}
-          command: |
-            cd /home/ec2-user/ecommerce-gamer-api
-            git pull
-            echo "SPRING_DATASOURCE_URL=${{ secrets.RDS_URL }}" > .env
-            echo "SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USERNAME }}" >> .env
-            echo "SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }}" >> .env
-            echo "API_SECURITY_TOKEN_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-            sudo docker-compose -f docker-compose.dev.yml up --build -d --force-recreate
+        run: |
+          aws ssm send-command \
+            --targets "Key=instanceIds,Values=${{ secrets.EC2_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy da aplicação" \
+            --parameters 'commands=[
+              "cd /home/ec2-user/ecommerce-gamer-api",
+              "git pull",
+              "echo SPRING_DATASOURCE_URL=${{ secrets.RDS_URL }} > .env",
+              "echo SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USERNAME }} >> .env",
+              "echo SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }} >> .env",
+              "echo API_SECURITY_TOKEN_SECRET=${{ secrets.JWT_SECRET }} >> .env",
+              "sudo docker-compose -f docker-compose.prod.yml up --build -d --force-recreate"
+            ]'
