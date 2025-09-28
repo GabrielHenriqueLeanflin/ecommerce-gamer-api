@@ -9,7 +9,10 @@ import com.ecommerce_gamer_api.infra.security.TokenService;
 import com.ecommerce_gamer_api.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,19 +30,19 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginRequestDTO body) {
-        Optional<User> userRequest = this.repository.findByEmail(body.email());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(body.email(), body.password());
 
-        if (userRequest.isPresent() && passwordEncoder.matches(body.password(), userRequest.get().getPassword())) {
-            User user = userRequest.get();
-            String token = tokenService.generateToken(user);
-            return ResponseEntity.ok(new AuthResponseDTO(user.getName(), token));
-        }
+        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        ErrorResponseDTO errorDTO = new ErrorResponseDTO("Usuário ou senha inválidos.", 401, Instant.now());
+        var user = (User) auth.getPrincipal();
+        var token = tokenService.generateToken(user);
 
-        return ResponseEntity.status(401).body(errorDTO);
+        return ResponseEntity.ok(new AuthResponseDTO(user.getName(), token));
     }
 
     @PostMapping("/register")
